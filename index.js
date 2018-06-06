@@ -1,4 +1,4 @@
-import * as Async from 'async'
+import { waterfall, map, mapValues } from 'async'
 import CmdArgs from 'command-line-args'
 import HackerNewsApi from 'lib/HackerNewsApi'
 import StoryProcessor from 'lib/StoryProcessor'
@@ -20,7 +20,8 @@ const main = () => {
 
     // Validate the posts argument
     if (!posts || typeof posts !== 'number' || posts <= 0 || posts > 100) {
-        console.error("Usage: NODE_PATH=build node ./build --posts n")
+        console.error("Usage (node): NODE_PATH=build node ./build --posts n")
+        console.error("Usage (docker): docker run scraper --posts n")
         console.info("The number of posts must be a positive integer smaller than 100.")
 
         return;
@@ -37,7 +38,7 @@ const main = () => {
      * 2) Asynchronously retrieval of each story's detailed info 
      * 3) Asynchronously processing of each story retrieved above
      */
-    Async.waterfall([
+    waterfall([
 
         // Retrieve top stories using the API class
         (callback) => {
@@ -52,7 +53,7 @@ const main = () => {
 
         // Retrieve each story's detailed info using the same API class instance
         (stories, callback) => {
-            Async.map(stories, (storyId, callback) => { api.retrieveStory(storyId, callback) }, (err, detailedStories) => {
+            map(stories, (storyId, callback) => { api.retrieveStory(storyId, callback) }, (err, detailedStories) => {
                 if (err) {
                     return callback(err)
                 }
@@ -63,7 +64,7 @@ const main = () => {
 
         // Process the stories
         (detailedStories, callback) => {
-            Async.mapValues(detailedStories, (story, index, callback) => { processor.process(index, story, callback) }, (err, processed) => {
+            mapValues(detailedStories, (story, index, callback) => { processor.process(index, story, callback) }, (err, processed) => {
                 if (err) {
                     return callback(err)
                 }

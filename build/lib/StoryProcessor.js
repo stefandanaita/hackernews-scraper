@@ -14,10 +14,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var DEFAULT_MAX_STRING_LENGTH = 256;
-var DEFAULT_ENFORCE_MAX_STRING = true;
-var DEFAULT_ENFORCE_VALID_URI = true;
-
 /**
  * Class responsible with processing a Hacker News story
  *
@@ -25,8 +21,8 @@ var DEFAULT_ENFORCE_VALID_URI = true;
  * to be easily controlled and re-used without
  * requiring major code changes.
  */
-
 var StoryProcessor = function () {
+
     /**
      * Class variables assignment. Predefine them
      * with default values that can be overriden
@@ -37,23 +33,22 @@ var StoryProcessor = function () {
     function StoryProcessor(options) {
         _classCallCheck(this, StoryProcessor);
 
-        // Initialize processor options with their defaults
-        this._maxStringLength = DEFAULT_MAX_STRING_LENGTH;
-        this._enforceMaxString = DEFAULT_ENFORCE_MAX_STRING;
-        this._enforceValidUri = DEFAULT_ENFORCE_VALID_URI;
+        this._maxStringLength = 256;
+        this._enforceMaxString = true;
+        this._enforceValidUri = true;
 
         // Override the options if requested
         if (options) {
             if (typeof options.enforceMaxString === 'boolean') {
-                this._enforceMaxString = options.enforceMaxString;
+                this.enforceMaxString = options.enforceMaxString;
             }
 
-            if (options.maxStringLength) {
-                this._maxStringLength = options.maxStringLength;
+            if (typeof options.maxStringLength === 'Number') {
+                this.maxStringLength = options.maxStringLength;
             }
 
             if (typeof options.enforceValidUri === 'boolean') {
-                this._enforceValidUri = options.enforceValidUri;
+                this.enforceValidUri = options.enforceValidUri;
             }
         }
     }
@@ -106,8 +101,8 @@ var StoryProcessor = function () {
     }, {
         key: 'stringProcessor',
         value: function stringProcessor(str) {
-            if (this._enforceMaxString && str.length > this._maxStringLength) {
-                return str.substring(0, this._maxStringLength);
+            if (this.enforceMaxString && str.length > this.maxStringLength) {
+                return str.substring(0, this.maxStringLength);
             }
 
             return str;
@@ -124,7 +119,7 @@ var StoryProcessor = function () {
     }, {
         key: 'uriValidator',
         value: function uriValidator(uri) {
-            return !this._enforceValidUri || this._enforceValidUri && ValidUrl.isUri(uri);
+            return !this.enforceValidUri || this.enforceValidUri && ValidUrl.isUri(uri);
         }
 
         /**

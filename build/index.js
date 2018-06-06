@@ -2,8 +2,6 @@
 
 var _async = require('async');
 
-var Async = _interopRequireWildcard(_async);
-
 var _commandLineArgs = require('command-line-args');
 
 var _commandLineArgs2 = _interopRequireDefault(_commandLineArgs);
@@ -17,8 +15,6 @@ var _StoryProcessor = require('lib/StoryProcessor');
 var _StoryProcessor2 = _interopRequireDefault(_StoryProcessor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // CLI Args definition
 var args = (0, _commandLineArgs2.default)([{
@@ -35,7 +31,8 @@ var main = function main() {
 
     // Validate the posts argument
     if (!posts || typeof posts !== 'number' || posts <= 0 || posts > 100) {
-        console.error("Usage: NODE_PATH=build node ./build --posts n");
+        console.error("Usage (node): NODE_PATH=build node ./build --posts n");
+        console.error("Usage (docker): docker run scraper --posts n");
         console.info("The number of posts must be a positive integer smaller than 100.");
 
         return;
@@ -51,7 +48,7 @@ var main = function main() {
      * 2) Asynchronously retrieval of each story's detailed info 
      * 3) Asynchronously processing of each story retrieved above
      */
-    Async.waterfall([
+    (0, _async.waterfall)([
 
     // Retrieve top stories using the API class
     function (callback) {
@@ -66,7 +63,7 @@ var main = function main() {
 
     // Retrieve each story's detailed info using the same API class instance
     function (stories, callback) {
-        Async.map(stories, function (storyId, callback) {
+        (0, _async.map)(stories, function (storyId, callback) {
             api.retrieveStory(storyId, callback);
         }, function (err, detailedStories) {
             if (err) {
@@ -79,7 +76,7 @@ var main = function main() {
 
     // Process the stories
     function (detailedStories, callback) {
-        Async.mapValues(detailedStories, function (story, index, callback) {
+        (0, _async.mapValues)(detailedStories, function (story, index, callback) {
             processor.process(index, story, callback);
         }, function (err, processed) {
             if (err) {

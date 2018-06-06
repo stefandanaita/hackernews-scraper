@@ -8,29 +8,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _axios = require('axios');
 
-var Axios = _interopRequireWildcard(_axios);
-
 var _util = require('util');
-
-var Util = _interopRequireWildcard(_util);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var DEFAULT_API_URL = 'https://hacker-news.firebaseio.com/v0/';
-var DEFAULT_TOP_ENDPOINT = 'topstories.json';
-var DEFAULT_STORY_ENDPOINT = 'item/%i.json';
-
 /**
  * Class responsible with calling the Hacker News API
- *
- * The setters/getters methods allow the class
- * to be easily controlled and re-used without
- * requiring major code changes.
  */
-
 var HackerNewsApi = function () {
+
     /**
      * Class variables assignment. Predefine them
      * with default values that can be overriden
@@ -39,12 +25,14 @@ var HackerNewsApi = function () {
     function HackerNewsApi() {
         _classCallCheck(this, HackerNewsApi);
 
-        this._topStoriesEndpoint = DEFAULT_TOP_ENDPOINT;
-        this._storyEndpoint = DEFAULT_STORY_ENDPOINT;
+        this._topStoriesEndpoint = 'topstories.json';
+        this._storyEndpoint = 'item/%i.json';
+        this._apiUrl = 'https://hacker-news.firebaseio.com/v0/';
+        this._axios = null;
 
         // Axios instance to avoid initializing one for every detailed story request
-        this._axios = Axios.create({
-            baseURL: DEFAULT_API_URL,
+        this.axios = (0, _axios.create)({
+            baseURL: this.apiUrl,
             timeout: 5000
         });
     }
@@ -61,7 +49,7 @@ var HackerNewsApi = function () {
     _createClass(HackerNewsApi, [{
         key: 'retrieveTopStories',
         value: function retrieveTopStories(numberOfStories, callback) {
-            this._axios.get(this._topStoriesEndpoint).then(function (res) {
+            this.axios.get(this.topStoriesEndpoint).then(function (res) {
                 callback(null, res.data.slice(0, numberOfStories));
             }).catch(function (err) {
                 callback('The top stories could not be retrieved. ' + err);
@@ -79,9 +67,9 @@ var HackerNewsApi = function () {
     }, {
         key: 'retrieveStory',
         value: function retrieveStory(storyId, callback) {
-            var endpoint = Util.format(this._storyEndpoint, storyId);
+            var endpoint = (0, _util.format)(this.storyEndpoint, storyId);
 
-            this._axios.get(endpoint).then(function (res) {
+            this.axios.get(endpoint).then(function (res) {
                 callback(null, res.data);
             }).catch(function (err) {
                 callback('The story with the ID ' + storyId + ' could not be retrieved. ' + err);
@@ -97,6 +85,9 @@ var HackerNewsApi = function () {
         key: 'axios',
         get: function get() {
             return this._axios;
+        },
+        set: function set(axios) {
+            this._axios = axios;
         }
     }, {
         key: 'topStoriesEndpoint',
@@ -113,6 +104,14 @@ var HackerNewsApi = function () {
         },
         set: function set(storyEndpoint) {
             this._storyEndpoint = storyEndpoint;
+        }
+    }, {
+        key: 'apiUrl',
+        get: function get() {
+            return this._apiUrl;
+        },
+        set: function set(apiUrl) {
+            this._apiUrl = apiUrl;
         }
     }]);
 
