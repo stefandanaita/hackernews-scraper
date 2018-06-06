@@ -87,5 +87,9 @@ describe('HackerNews API', () => {
         it('should fail to retrieve a non existent story', () => {
             expect(api.retrieveStory(0)).to.be.empty
         })
+
+        it('should fail when no Story ID provided', () => {
+            expect(api.retrieveStory()).to.be.empty
+        })
     })
 })
