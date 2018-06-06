@@ -96,3 +96,22 @@ Or straight
 
     npm run docker-test
 
+
+
+# Libraries
+
+A small number of external libraries were used for the *production* usage
+
+- [command-line-args](https://www.npmjs.com/package/command-line-args) to get the number of posts argument
+- [axios](https://www.npmjs.com/package/axios) to send the `GET` requests to the [Hacker News API](https://github.com/HackerNews/API)
+- [util](https://nodejs.org/api/util.html) *(internal node library)* to nicely inject the `storyId` into the request endpoint
+- [valid-url](https://www.npmjs.com/package/valid-url) to validate the URLs
+
+For development purposes, the following libraries were used
+
+- [Babel](http://babeljs.io) to compile the **ES6** JavaScript code
+- [Mocha](https://mochajs.org) and [Chai](http://chaijs.com) for testing
+- [babel-register](https://www.npmjs.com/package/babel-register) to compile the `ES6` test files.
+- [rimraf](https://www.npmjs.com/package/rimraf) to remove the `build` folder when the application is rebuilt
+
+The application code is written using ES6 Classes, async/await and respects the single responsibility principle which is making it easy to maintain or further develop.
