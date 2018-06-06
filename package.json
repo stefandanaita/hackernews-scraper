@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/stefandanaita/hackernews-scraper#readme",
   "dependencies": {
-    "async": "^2.6.1",
     "axios": "^0.18.0",
     "command-line-args": "^5.0.2",
     "valid-url": "^1.0.9"
