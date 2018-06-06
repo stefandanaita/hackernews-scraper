@@ -111,7 +111,7 @@ For development purposes, the following libraries were used
 
 - [Babel](http://babeljs.io) to compile the **ES6** JavaScript code
 - [Mocha](https://mochajs.org) and [Chai](http://chaijs.com) for testing
-- [babel-register](https://www.npmjs.com/package/babel-register) to compile the `ES6` test files.
+- [babel-register](https://www.npmjs.com/package/babel-register) to compile the `ES6` test files on the fly
 - [rimraf](https://www.npmjs.com/package/rimraf) to remove the `build` folder when the application is rebuilt
 
 The application code is written using ES6 Classes, async/await and respects the single responsibility principle which is making it easy to maintain or further develop.
