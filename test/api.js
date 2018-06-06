@@ -12,6 +12,7 @@ describe('HackerNews API', () => {
         api = new HackerNewsApi
     })
 
+    // Testing the setters/getters
     describe('Core functionality', () => {
         it('should return the right default Base Url', () => {
             expect(api.apiUrl).to.equal('https://hacker-news.firebaseio.com/v0/')
@@ -44,6 +45,7 @@ describe('HackerNews API', () => {
         })
     })
 
+    // Testing the Top Stories API Endpoint
     describe('Top stories', () => {
         it('should retrieve the top 5 stories', async () => {
             let stories = await api.retrieveTopStories(5)
@@ -79,6 +81,7 @@ describe('HackerNews API', () => {
         })
     })
 
+    // Testing the Single Story API Endpoint
     describe('Detailed story', () => {
         it('should retrieve a specific story', async () => {
             expect(await api.retrieveStory(250)).to.include.all.keys('id', 'by', 'time')

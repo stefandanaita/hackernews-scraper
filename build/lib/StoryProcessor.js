@@ -117,7 +117,11 @@ var StoryProcessor = function () {
     }, {
         key: 'uriValidator',
         value: function uriValidator(uri) {
-            return !this.enforceValidUri || this.enforceValidUri && ValidUrl.isUri(uri);
+            if (this.enforceValidUri) {
+                return typeof ValidUrl.isUri(uri) !== 'undefined';
+            }
+
+            return true;
         }
 
         /**
