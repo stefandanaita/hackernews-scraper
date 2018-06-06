@@ -11,7 +11,7 @@ WORKDIR ~/scraper
 
 # Prepare the node_modules
 COPY package*.json ./
-RUN npm install
+RUN npm install --only-production
 
 # Copy the sourcecode
 COPY ./ ./
