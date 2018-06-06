@@ -1,7 +1,5 @@
 'use strict';
 
-var _async = require('async');
-
 var _commandLineArgs = require('command-line-args');
 
 var _commandLineArgs2 = _interopRequireDefault(_commandLineArgs);
@@ -26,7 +24,7 @@ var args = (0, _commandLineArgs2.default)([{
 /**
  * Application's entry function
  */
-var main = function main() {
+var main = async function main() {
     var posts = args.posts;
 
     // Validate the posts argument
@@ -39,61 +37,24 @@ var main = function main() {
     }
 
     // Initialize the API and Processor classes
-    var api = new _HackerNewsApi2.default(),
-        processor = new _StoryProcessor2.default();
+    var api = new _HackerNewsApi2.default();
+    var processor = new _StoryProcessor2.default();
 
-    /*
-     * Synchronous waterfall through the scraper's steps
-     * 1) Top stories retrieval
-     * 2) Asynchronously retrieval of each story's detailed info 
-     * 3) Asynchronously processing of each story retrieved above
-     */
-    (0, _async.waterfall)([
+    var processed = [];
 
-    // Retrieve top stories using the API class
-    function (callback) {
-        api.retrieveTopStories(posts, function (err, stories) {
-            if (err) {
-                return callback(err);
-            }
-
-            callback(null, stories);
+    try {
+        var stories = await api.retrieveTopStories(posts);
+        var detailedStoriesRequests = stories.map(function (storyId) {
+            return api.retrieveStory(storyId);
         });
-    },
+        var detailedStories = await Promise.all(detailedStoriesRequests);
 
-    // Retrieve each story's detailed info using the same API class instance
-    function (stories, callback) {
-        (0, _async.map)(stories, function (storyId, callback) {
-            api.retrieveStory(storyId, callback);
-        }, function (err, detailedStories) {
-            if (err) {
-                return callback(err);
-            }
+        processed = detailedStories.map(processor.process);
+    } catch (err) {
+        return console.log(err);
+    }
 
-            callback(null, detailedStories);
-        });
-    },
-
-    // Process the stories
-    function (detailedStories, callback) {
-        (0, _async.mapValues)(detailedStories, function (story, index, callback) {
-            processor.process(index, story, callback);
-        }, function (err, processed) {
-            if (err) {
-                return callback(err);
-            }
-
-            callback(null, processed);
-        });
-    }], function (err, processedStories) {
-        // Single error displaying point
-        if (err) {
-            return console.log(err);
-        }
-
-        // Display the final array of stories
-        console.log(Object.values(processedStories));
-    });
+    console.log(processed);
 };
 
 main();

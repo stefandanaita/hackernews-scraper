@@ -2,7 +2,7 @@
 FROM node:carbon
 
 # Some metadata
-LABEL version="1.0"
+LABEL version="1.0.0"
 LABEL description="Hacker News Scraper"
 LABEL maintainer "Stefan Danaita <me@dsa.io>"
 

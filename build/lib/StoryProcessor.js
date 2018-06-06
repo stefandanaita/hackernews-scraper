@@ -37,6 +37,8 @@ var StoryProcessor = function () {
         this._enforceMaxString = true;
         this._enforceValidUri = true;
 
+        this.process = this.process.bind(this);
+
         // Override the options if requested
         if (options) {
             if (typeof options.enforceMaxString === 'boolean') {
@@ -65,30 +67,26 @@ var StoryProcessor = function () {
 
     _createClass(StoryProcessor, [{
         key: 'process',
-        value: function process(index, story, callback) {
-            try {
-                var processed = {
-                    title: this.stringProcessor(story.title),
-                    author: this.stringProcessor(story.by),
-                    rank: index + 1
-                };
+        value: function process(story, index) {
+            var processed = {
+                title: this.stringProcessor(story.title),
+                author: this.stringProcessor(story.by),
+                rank: index + 1
+            };
 
-                if (this.uriValidator(story.url)) {
-                    processed.uri = story.url;
-                }
-
-                if (this.storyNumberValidator(story.score)) {
-                    processed.points = story.score;
-                }
-
-                if (this.storyNumberValidator(story.descendants)) {
-                    processed.comments = story.descendants;
-                }
-
-                return callback(null, processed);
-            } catch (err) {
-                return callback(err);
+            if (this.uriValidator(story.url)) {
+                processed.uri = story.url;
             }
+
+            if (this.storyNumberValidator(story.score)) {
+                processed.points = story.score;
+            }
+
+            if (this.storyNumberValidator(story.descendants)) {
+                processed.comments = story.descendants;
+            }
+
+            return processed;
         }
 
         /**

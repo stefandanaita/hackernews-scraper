@@ -42,18 +42,15 @@ var HackerNewsApi = function () {
      * first <numberOfStories> required via the command line argument.
      *
      * @numberOfStories {Number} - The total number of jobs that will be returned
-     * @callback {Function}
      */
 
 
     _createClass(HackerNewsApi, [{
         key: 'retrieveTopStories',
-        value: function retrieveTopStories(numberOfStories, callback) {
-            this.axios.get(this.topStoriesEndpoint).then(function (res) {
-                callback(null, res.data.slice(0, numberOfStories));
-            }).catch(function (err) {
-                callback('The top stories could not be retrieved. ' + err);
-            });
+        value: async function retrieveTopStories(numberOfStories) {
+            var res = await this.axios.get(this.topStoriesEndpoint);
+
+            return res.data.slice(0, numberOfStories);
         }
 
         /**
@@ -61,19 +58,15 @@ var HackerNewsApi = function () {
          * story with the ID <storyId> and returns it.
          *
          * @storyId {Number} - The ID of the requested story
-         * @callback {Function}
          */
 
     }, {
         key: 'retrieveStory',
-        value: function retrieveStory(storyId, callback) {
-            var endpoint = (0, _util.format)(this.storyEndpoint, storyId);
+        value: async function retrieveStory(storyId) {
+            var endpoint = (0, _util.format)(this.storyEndpoint, storyId),
+                res = await this.axios.get(endpoint);
 
-            this.axios.get(endpoint).then(function (res) {
-                callback(null, res.data);
-            }).catch(function (err) {
-                callback('The story with the ID ' + storyId + ' could not be retrieved. ' + err);
-            });
+            return res.data;
         }
 
         /**
