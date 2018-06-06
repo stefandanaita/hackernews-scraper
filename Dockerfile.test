@@ -3,20 +3,22 @@ FROM node:carbon
 
 # Some metadata
 LABEL version="1.0.0"
-LABEL description="Hacker News Scraper"
+LABEL description="Hacker News Scraper - Unit Tests"
 LABEL maintainer "Stefan Danaita <me@dsa.io>"
 
-RUN mkdir -p ~/scraper
-WORKDIR ~/scraper
+RUN mkdir -p ~/scraper-test
+WORKDIR ~/scraper-test
 
 # Prepare the node_modules
 COPY package*.json ./
-RUN npm install --only-production
+COPY .babelrc ./
+RUN npm install
 
 # Copy the sourcecode (only the compiled files are necessary)
 COPY ./build ./build
+COPY ./test ./test
 
 # Set the right Node path for nice lib import paths
 ENV NODE_PATH build
 
-ENTRYPOINT ["node", "build"]
+ENTRYPOINT ["npm", "test"]
