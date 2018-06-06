@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf build/ && babel ./ --out-dir build/ --ignore ./node_modules,./.babelrc,./package.json,./package-lock.json,./npm-debug.log --copy-files",
+    "build": "rimraf build/ && babel ./ --out-dir build/ --ignore ./node_modules,./.babelrc,./package.json,./package-lock.json,./npm-debug.log,./Dockerfile,./.dockerignore,README.md --copy-files",
     "start": "npm run build && NODE_PATH=build node build/index.js"
   },
   "repository": {

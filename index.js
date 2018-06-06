@@ -20,7 +20,7 @@ const main = () => {
 
     // Validate the posts argument
     if (!posts || typeof posts !== 'number' || posts <= 0 || posts > 100) {
-        console.error("Usage: node ./build --posts n")
+        console.error("Usage: NODE_PATH=build node ./build --posts n")
         console.info("The number of posts must be a positive integer smaller than 100.")
 
         return;
