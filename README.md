@@ -47,7 +47,7 @@ Or via the NPM scripts
 
     npm start -- --posts n
 
-The double dashes `--` in the `npm start -- --posts n` are necessary so that the arguments is passed to the command.
+The double dashes `--` in the `npm start -- --posts n` are necessary so that the argument is passed to the command.
 
 
 ## Docker
@@ -79,7 +79,7 @@ To install the dev dependencies and execute the tests, run
 
 To setup the testing Docker container, run
 
-    docker build -t hackernews-scraper-test -f Dockerfile.test .
+    docker build -t hackernews-scraper-test -f Dockerfile.test ./
 
 Alternatively, you can just run
 
